@@ -13,14 +13,14 @@
 ##	    Yifan Liu  518021910609
 
 ####################################################################
-# Description:							                                       #	
-# a. Computations required for the iaddl instruction:	   	         #
-#	    Byte	        1	    2	  3 4 5			                           #
-#	  iaddl V, rB    C 0	F rB	  V			                             #
-#								                                                   #
-# fetch:  icode:ifun <- M1[PC]					                           #
-#	        rA:rB <- M1[PC+1]					                               #
-# 	      valC <- 
+# Description:							   #	
+# a. Computations required for the iaddl instruction:	   	   #
+#	    Byte	1	2	3 4 5			   #
+#	iaddl V, rB    C 0	F rB	  V			   #
+#								   #
+# fetch:  icode:ifun <- M1[PC]					   #
+#	  rA:rB <- M1[PC+1]					   #
+# 	  valC <- 
 
 
 ####################################################################
