@@ -9,18 +9,42 @@
 ## for iaddl (IIADDL) .
 ## Your job is to add the rest of the logic to make it work
 
-## Leaders: Chunyu Xue 518021910698
-##	    Yifan Liu  518021910609
+####################################################################
+## Leaders: Chunyu Xue 518021910698				   #
+##	    Yifan Liu  518021910609				   #
+####################################################################
 
 ####################################################################
-# Description:							   #	
-# a. Computations required for the iaddl instruction:	   	   #
-#	    Byte	1	2	3 4 5			   #
-#	iaddl V, rB    C 0	F rB	  V			   #
+# DESCRIPTION:							   #	
+# A. Computations required for the iaddl instruction:	   	   #
+#	    Byte     |	1   |	2     | 3 4 5			   #
+#	iaddl V, rB  |  C 0 |	F rB  |	  V			   #
 #								   #
-# fetch:  icode:ifun <- M1[PC]					   #
-#	  rA:rB <- M1[PC+1]					   #
-# 	  valC <- 
+# Fetch:  	icode:ifun <- M1[PC]				   #
+#	  	rA:rB <- M1[PC+1]				   #
+# 	  	valC <- M4[PC+2]				   #
+#	  	valP <- PC+6					   #
+# Decode: 	valB <- R[rB]					   #
+# Execute:	valE <- valC + valB				   #
+#	  	Set CC						   #
+# Memory: 							   #
+# Write back: 	R[rB] <- valE					   #
+# PC update:	PC <- valP					   #
+#								   #
+# B. Computations required for the leave instruction:		   #
+# 								   #
+# Fetch:	icode:ifun <- M1[PC]				   #
+#		valP <- PC+1					   #
+# Decode:	valA <- R[%ebp]					   #
+# 		valB <- R[%esp]					   #
+# Execute:	valE <- valA + 4				   #
+# Memory:	valM <- M4[valA]	# valA is the value of rA  #
+# Write back:	R[%esp] <- valE					   #
+#		R[%ebp] <- valM					   #
+# PC update:	PC <- valP					   #
+#								   #
+####################################################################
+
 
 
 ####################################################################
@@ -150,8 +174,7 @@ int srcA = [
 ## What register should be used as the B source?
 int srcB = [
 	icode in { IOPL, IRMMOVL, IMRMOVL, IIADDL } : rB;
-	icode in { IPUSHL, IPOPL, ICALL, IRET } : RESP;
-	icode in { ILEAVE } : REBP;
+	icode in { IPUSHL, IPOPL, ICALL, IRET, ILEAVE} : RESP;
 	1 : RNONE;  # Don't need register
 ];
 
@@ -184,8 +207,9 @@ int aluA = [
 ## Select input B to ALU
 int aluB = [
 	icode in { IRMMOVL, IMRMOVL, IOPL, ICALL, 
-		      IPUSHL, IRET, IPOPL, IIADDL, ILEAVE } : valB;
+		      IPUSHL, IRET, IPOPL, IIADDL } : valB;
 	icode in { IRRMOVL, IIRMOVL } : 0;
+	icode in { ILEAVE } : valA;
 	# Other instructions don't need ALU
 ];
 
