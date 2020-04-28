@@ -17,8 +17,13 @@
 ####################################################################
 # DESCRIPTION:							   #	
 # A. Computations required for the iaddl instruction:	   	   #
-#	    Byte     |	1   |	2     | 3 4 5			   #
-#	iaddl V, rB  |  C 0 |	F rB  |	  V			   #
+#	    Byte     0   |  1    |  2  3  4  5			   #
+#	iaddl V, rB  C 0 | F rB  | 	V			   #
+#								   #
+# #Function: 							   #
+#	The iiaddl instruction is used to add a constant 	   #
+#	value to a register, which combines both irmovl and addl.  #
+#	instructions together to implement.			   #
 #								   #
 # Fetch:  	icode:ifun <- M1[PC]				   #
 #	  	rA:rB <- M1[PC+1]				   #
@@ -31,7 +36,14 @@
 # Write back: 	R[rB] <- valE					   #
 # PC update:	PC <- valP					   #
 #								   #
+#								   #
 # B. Computations required for the leave instruction:		   #
+#	    Byte     0   |  1   2  3  4  5			   #
+#	   ileave   D 0  | 	    				   #
+#								   #
+# #Function: 							   #
+#	The ileave instruction takes only 1 byte, which is used to #
+#	prepare tje stack for returning.		 	   #
 # 								   #
 # Fetch:	icode:ifun <- M1[PC]				   #
 #		valP <- PC+1					   #
