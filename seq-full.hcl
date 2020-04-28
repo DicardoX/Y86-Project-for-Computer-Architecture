@@ -21,8 +21,8 @@
 #	iaddl V, rB  C 0 | F rB  | 	V			   #
 #								   #
 # #Function: 							   #
-#	The iiaddl instruction is used to add a constant 	   #
-#	value to a register, which combines both irmovl and addl.  #
+#	The iiaddl instruction is used to add a constant V	   #
+#	value to register rB, which combines both irmovl and addl. #
 #	instructions together to implement.			   #
 #								   #
 # Fetch:  	icode:ifun <- M1[PC]				   #
