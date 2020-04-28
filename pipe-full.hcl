@@ -16,9 +16,29 @@
 
 ####################################################################
 # DESCRIPTION:							   #
-#	We add a new instruction IIADDL into pipe.full.hcl file,   #
+#	We add a new instruction IIADDL into pipe-full.hcl file,   #
 #	which can significantly enhance the performance of the 	   #
-#	ncopy.ys.						   #
+#	ncopy.ys. 						   #
+# Computations required for the iaddl instruction:	   	   #
+#	    Byte     0   |  1    |  2  3  4  5			   #
+#	iaddl V, rB  C 0 | F rB  | 	V			   #
+#								   #
+# #Function: 							   #
+#	The iiaddl instruction is used to add a constant V	   #
+#	value to register rB, which combines both irmovl and addl. #
+#	instructions together to implement.			   #
+#								   #
+# Fetch:  	icode:ifun <- M1[PC]				   #
+#	  	rA:rB <- M1[PC+1]				   #
+# 	  	valC <- M4[PC+2]				   #
+#	  	valP <- PC+6					   #
+# Decode: 	valB <- R[rB]					   #
+# Execute:	valE <- valC + valB				   #
+#	  	Set CC						   #
+# Memory: 							   #
+# Write back: 	R[rB] <- valE					   #
+# PC update:	PC <- valP					   #
+#								   #
 ####################################################################
 
 ####################################################################
